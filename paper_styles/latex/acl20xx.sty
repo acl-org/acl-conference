@@ -437,10 +437,6 @@
 \newcommand\shortcite{\citeyearpar}% to get "(Year)" with natbib    
 \newcommand\newcite{\citet}	% to get "Author (Year)" with natbib    
 
-% DK/IV: Workaround for annoying hyperref pagewrap bug 
-\RequirePackage{etoolbox}
-\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{\errmessage{\noexpand patch failed}}
-
 % bibliography
 
 \def\@up#1{\raise.2ex\hbox{#1}}
