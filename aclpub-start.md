@@ -566,8 +566,6 @@ Note: If you create a custom program **make sure that the order file matches the
 <kbd>![alt text](assets/images/program.png "The Program Tab.")</kbd>
 
 
-
-
 ## Step 8:  Toc Tab
 [Jump to Step 9](#step-9--generate-tab-trophy-trophy)
 
@@ -576,10 +574,7 @@ Customize your `toc.tex` here.  This is generated automatically in the Templates
 <kbd>![alt text](assets/images/toc.png "The Table of Contents Tab.")</kbd>
 
 
-
-
 ## Step 9:  Generate! Tab :trophy: :trophy:
-
 
 <kbd>![alt text](assets/images/generate.png "The Generate Tab.")</kbd>
    
