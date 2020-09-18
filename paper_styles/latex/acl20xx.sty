@@ -92,6 +92,11 @@
 % \usepackage{acl2015}
 % where <new height> can be something larger than 5cm
 
+\newif\ifacl@finalcopy
+\DeclareOption{finalcopy}{\acl@finalcopytrue}
+\DeclareOption{blindcopy}{\acl@finalcopyfalse}
+\ExecuteOptions{finalcopy} % final copy is the default
+
 % include hyperref, unless user specifies nohyperref option like this:
 % \usepackage[nohyperref]{naaclhlt2018}
 \newif\ifacl@hyperref
@@ -104,7 +109,7 @@
   \RequirePackage{hyperref}
   \usepackage{xcolor}		% make links dark blue
   \definecolor{darkblue}{rgb}{0, 0, 0.5}
-  \hypersetup{colorlinks=true,citecolor=darkblue, linkcolor=darkblue, urlcolor=darkblue}
+  \hypersetup{colorlinks=true, citecolor=darkblue, linkcolor=darkblue, urlcolor=darkblue}
 \else
   % This definition is used if the hyperref package is not loaded.
   % It provides a backup, no-op definiton of \href.
@@ -114,7 +119,71 @@
   \usepackage{xcolor}
 \fi
 
-\typeout{Conference Style for ACL 2019}
+\ifacl@finalcopy\else
+  % Add draft line numbering via the lineno package
+  % https://texblog.org/2012/02/08/adding-line-numbers-to-documents/
+  \usepackage[switch,mathlines]{lineno}
+
+  % Line numbers in gray Helvetica 8pt
+  \font\aclhv = phvb at 8pt
+  \renewcommand\linenumberfont{\aclhv\color{gray}}
+
+  % Zero-fill line numbers
+  % NUMBER with left flushed zeros  \fillzeros[<WIDTH>]<NUMBER>
+  \newcount\cv@tmpc@ \newcount\cv@tmpc
+  \def\fillzeros[#1]#2{\cv@tmpc@=#2\relax\ifnum\cv@tmpc@<0\cv@tmpc@=-\cv@tmpc@\fi
+    \cv@tmpc=1 %
+    \loop\ifnum\cv@tmpc@<10 \else \divide\cv@tmpc@ by 10 \advance\cv@tmpc by 1 \fi
+       \ifnum\cv@tmpc@=10\relax\cv@tmpc@=11\relax\fi \ifnum\cv@tmpc@>10 \repeat
+    \ifnum#2<0\advance\cv@tmpc1\relax-\fi
+    \loop\ifnum\cv@tmpc<#1\relax0\advance\cv@tmpc1\relax\fi \ifnum\cv@tmpc<#1 \repeat
+    \cv@tmpc@=#2\relax\ifnum\cv@tmpc@<0\cv@tmpc@=-\cv@tmpc@\fi \relax\the\cv@tmpc@}%
+  \renewcommand\thelinenumber{\fillzeros[3]{\arabic{linenumber}}}
+  \linenumbers
+
+  \setlength{\linenumbersep}{1.6cm}
+
+  % Bug: An equation with $$ ... $$ isn't numbered, nor is the previous line.
+
+  % Patch amsmath commands so that the previous line and the equation itself
+  % are numbered. Bug: multline has an extra line number.
+  % https://tex.stackexchange.com/questions/461186/how-to-use-lineno-with-amsmath-align
+  \usepackage{etoolbox} %% <- for \pretocmd, \apptocmd and \patchcmd
+  
+  \newcommand*\linenomathpatch[1]{%
+    \expandafter\pretocmd\csname #1\endcsname {\linenomath}{}{}%
+    \expandafter\pretocmd\csname #1*\endcsname {\linenomath}{}{}%
+    \expandafter\apptocmd\csname end#1\endcsname {\endlinenomath}{}{}%
+    \expandafter\apptocmd\csname end#1*\endcsname {\endlinenomath}{}{}%
+  }
+  \newcommand*\linenomathpatchAMS[1]{%
+    \expandafter\pretocmd\csname #1\endcsname {\linenomathAMS}{}{}%
+    \expandafter\pretocmd\csname #1*\endcsname {\linenomathAMS}{}{}%
+    \expandafter\apptocmd\csname end#1\endcsname {\endlinenomath}{}{}%
+    \expandafter\apptocmd\csname end#1*\endcsname {\endlinenomath}{}{}%
+  }
+  
+  %% Definition of \linenomathAMS depends on whether the mathlines option is provided
+  \expandafter\ifx\linenomath\linenomathWithnumbers
+    \let\linenomathAMS\linenomathWithnumbers
+    %% The following line gets rid of an extra line numbers at the bottom:
+    \patchcmd\linenomathAMS{\advance\postdisplaypenalty\linenopenalty}{}{}{}
+  \else
+    \let\linenomathAMS\linenomathNonumbers
+  \fi
+
+  \AtBeginDocument{%
+    \linenomathpatch{equation}%
+    \linenomathpatchAMS{gather}%
+    \linenomathpatchAMS{multline}%
+    \linenomathpatchAMS{align}%
+    \linenomathpatchAMS{alignat}%
+    \linenomathpatchAMS{flalign}%
+  }
+  
+\fi
+
+\typeout{Conference Style for ACL 2020}
 
 % NOTE:  Some laser printers have a serious problem printing TeX output.
 % These printing devices, commonly known as ``write-white'' laser
@@ -145,10 +214,6 @@
 % We're never going to need a table of contents, so just flush it to
 % save space --- suggested by drstrip@sandia-2
 \def\addcontentsline#1#2#3{}
-
-\newif\ifaclfinal
-\aclfinalfalse
-\def\aclfinalcopy{\global\aclfinaltrue}
 
 %% ----- Set up hooks to repeat content on every page of the output doc, 
 %% necessary for the line numbers in the submitted version.  --MM
@@ -336,36 +401,14 @@
 \ifnum\cv@refno<\cv@tot\repeat}}\endgroup}%
 %\makeatother
 
-
 \def\confidential{\textcolor{black}{Confidential Review Copy.  DO NOT DISTRIBUTE.}}
 
 %% Page numbering, Vruler and Confidentiality %%
 % \makevruler[<SCALE>][<INITIAL_COUNT>][<STEP>][<DIGITS>][<HEIGHT>]
 
-% SC/KG/WL - changed line numbering to gainsboro
-\definecolor{gainsboro}{rgb}{0.8, 0.8, 0.8}
-%\def\aclruler#1{\makevruler[14.17pt][#1][1][3][\textheight]\usebox{\aclrulerbox}}  %% old line
-\def\aclruler#1{\textcolor{gainsboro}{\makevruler[14.17pt][#1][1][3][\textheight]\usebox{\aclrulerbox}}}
-
 \def\leftoffset{-2.1cm} %original: -45pt
 \def\rightoffset{17.5cm} %original: 500pt
-\ifaclfinal\else\pagenumbering{arabic}\fi
-\AddToShipoutPicture{%
-\ifaclfinal\else
-\AtPageLowishCenter{\textcolor{black}{\thepage}}
-\aclruleroffset=\textheight
-\advance\aclruleroffset4pt
-  \AtTextUpperLeft{% 
-    \put(\LenToUnit{\leftoffset},\LenToUnit{-\aclruleroffset}){%left ruler
-      \aclruler{\aclrulercount}}
-    \put(\LenToUnit{\rightoffset},\LenToUnit{-\aclruleroffset}){%right ruler
-      \aclruler{\aclrulercount}}
-  }
-  \AtTextUpperLeft{%confidential
-    \put(0,\LenToUnit{1cm}){\parbox{\textwidth}{\centering\aclhv\confidential}}
-  }
-\fi
-}
+\ifacl@finalcopy\else\pagenumbering{arabic}\fi
 
 %%%% ----- End settings for placing additional items into the submitted version --MM ----- %%%%
 
@@ -375,7 +418,7 @@
 
 \newcommand\outauthor{
     \begin{tabular}[t]{c}
-	\ifaclfinal 
+    \ifacl@finalcopy
 	     \bf\@author
 	\else 
 		% Avoiding common accidental de-anonymization issue. --MM
@@ -385,7 +428,7 @@
 
 % Changing the expanded titlebox for submissions to 2.5 in (rather than 6.5cm)
 % and moving it to the style sheet, rather than within the example tex file. --MM
-\ifaclfinal 
+\ifacl@finalcopy
 \else 
 	\addtolength\titlebox{.25in}
 \fi
@@ -450,7 +493,6 @@
 \renewcommand\cite{\citep}	% to get "(Author Year)" with natbib    
 \newcommand\shortcite{\citeyearpar}% to get "(Year)" with natbib    
 \newcommand\newcite{\citet}	% to get "Author (Year)" with natbib    
-
 
 % bibliography
 
@@ -555,3 +597,4 @@
 \def\LARGE{\@setsize\LARGE{20pt}\xviipt\@xviipt}
 \def\huge{\@setsize\huge{23pt}\xxpt\@xxpt}
 \def\Huge{\@setsize\Huge{28pt}\xxvpt\@xxvpt}
+
