@@ -59,20 +59,17 @@ commands. Please try to follow these guidelines:
    conjunctions, and the infinitive marker "to." This includes
    hyphenated words like `Mixed-Case`.
 
- - BibTeX (in many bibliography styles, including ACL's) lowercases
+ - In many bibliography styles, including ACL's, BibTeX lowercases
    the titles of conference papers, and needs to be told which letters
-   _not_ to lowercase. So if your title has letters that should always
-   be capitals, please protect them with curly braces, like this:
-   `{E}nglish`, `{C}homsky`, `{IBM}`, `{CFG}s`, `{HMM}s`. Please also
-   protect the first letter after a sentence-final punctuation
-   mark. For example:
+   _not_ to lowercase. This is handled by using curly braces around
+   such terms: e.g., `{E}nglish`, `{C}homsky`, `{IBM}`, `{CFG}s`, `{HMM}s`.
+   *As of 2020, this protection is now applied automatically* upon
+   ingestion to the Anthology by means of heuristics (applied to CamelCase
+   and UPPERCASE terms, and after punctuation) and a [very long curated list](https://github.com/acl-org/acl-anthology/blob/master/bin/fixedcase/truelist) of proper nouns and phrases. As such there is *no need
+   for you to apply your own case protection*, unless your paper
+   title contains a very uncommon proper noun.
 
-   ```
-   Can {LSTM} {L}earn to {C}apture {A}greement? {T}he {C}ase of {B}asque
-   Named {E}ntity {E}xtraction from {N}oisy {I}nput: {S}peech and {OCR}
-   ```
-
-   These curly braces will _not_ appear in the online conference
+   Note that curly braces will _not_ appear in the online conference
    program or proceedings. They will only appear in the BibTeX file
    that others will use to cite your paper.
 
