@@ -53,7 +53,7 @@ Document originally written by Meg Mitchell, for ACL 2017, NAACL 2018, and ACL 2
 
 ## tl;dr
 
-You will be used softconf/START to generate your proceedings. Your goal is to get to the last step, Generate `All`, under the **Generate** tab, without any errors.
+You will be using softconf/START to generate your proceedings. Your goal is to get to the last step, Generate `All`, under the **Generate** tab, without any errors.
 <kbd>![alt text](assets/images/aclpub_goal.png "Image of last Generate tab view, with 'All' button producing successful proceedings.")</kbd>
 
 :point_right: :point_right: It has to look good and abide by the ACL paper and style guidelines. It's up to you to make sure it does. :point_left: :point_left: :ok_hand: :thumbsup:
@@ -112,7 +112,7 @@ __*If you'd prefer to edit files directly, go the [Expert Route](#expert-route).
 |  `preface.tex`    | Preface Page.  Welcomes readers to the proceedings and gives some detail on the event. |
 |  `organizers.tex` | Organizers Page.  Lists the organizing committee, program committee, invited speakers, panelists, etc. |
 |  `toc.tex`        | Table of Contents Page.  This will be filled out automatically, but you can customize if you want. |
-|  `program.tex`    | Schedule Page.  This too fill be filled out automatically, but you can customize if you want.|
+|  `program.tex`    | Schedule Page.  This too will be filled out automatically, but you can customize if you want.|
 |  `spine.tex`      | Book Spine, for use in the printed handbook. |
 |  `citation-stamp.tex` | The Official Proceedings Footer that gives the citation details of the conference.  Appears on the bottom of the first page of each article in the proceedings. |   
 | `order` | Determines the author ordering in the proceedings and the schedule. |
@@ -123,7 +123,7 @@ __*If you'd prefer to edit files directly, go the [Expert Route](#expert-route).
 | File              | Role in Proceedings |
 | ----------------- | --------------------------- |
 |  `index.html`      | Home page with list of papers and link to book proceedings. |
-|  `program.html`    | Schedule Page, with links to papers.  This fill be filled out automatically based on the `order` file, but you can customize if you want.|
+|  `program.html`    | Schedule Page, with links to papers.  This will be filled out automatically based on the `order` file, but you can customize if you want.|
 | `authors.html`| Page of the authors, with links to entries in `index.html`. |
 | `order` | Determines the author ordering in `program.html`. |
 | `copyright-signatures` | Authors' copyright signatures, so the conference can print their work. |
@@ -186,7 +186,7 @@ The command compiles all camera ready papers into a single pdf, adds margin mark
 
 Count the papers to make sure you're not missing any (e.g., due to an author's failure to submit camera-ready copy).
 
-**Errors**: If this or any of the other generation buttons in this tab fail (you will know, because a `zip` and `log` will appear, but not the `Download` quick link), check the log file to get a pointer to another, more specific log file, e.g,. program.log. This file will be located in the zip. Download it, and find the referenced log to see the actual issue. If you are unclear of the issue, email the publciation chairs. They have access to your softconf/START portal and can help debug the issue. 
+**Errors**: If this or any of the other generation buttons in this tab fail (you will know, because a `zip` and `log` will appear, but not the `Download` quick link), check the log file to get a pointer to another, more specific log file, e.g,. program.log. This file will be located in the zip. Download it, and find the referenced log to see the actual issue. If you are unclear of the issue, email the publication chairs. They have access to your softconf/START portal and can help debug the issue. 
 
 ### Step 1.3 Check and Fix PDF files
 
